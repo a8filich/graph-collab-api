@@ -3,6 +3,7 @@ module github.com/a8filich/graph-collab-api
 go 1.21.5
 
 require (
+	github.com/google/uuid v1.5.0
 	github.com/rs/zerolog v1.31.0
 	github.com/stretchr/testify v1.5.0
 )

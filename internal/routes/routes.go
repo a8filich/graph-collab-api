@@ -1,11 +1,12 @@
 package routes
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
-	//"io/ioutil"
 
 	"github.com/rs/zerolog"
 )
@@ -59,6 +60,7 @@ func HealthzHandler(writer http.ResponseWriter, req *http.Request) {
 	fmt.Fprintln(writer, "Healthy")
 }
 
+// TODO: implement input data processing
 func InputDataBig5Handler(writer http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		logger.Error().Msg(fmt.Sprintf("Incoming %s request, method not allowed", req.Method))
@@ -68,20 +70,27 @@ func InputDataBig5Handler(writer http.ResponseWriter, req *http.Request) {
 
 	logger.Debug().Msg("Incoming request with Big Five data")
 
-	// TODO: Implement request body processing.
-	/*
-		body, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			logger.Error().Msg("Error reading request body for Big5 input data")
-			http.Error(writer, "Error reading request body", http.StatusInternalServerError)
-			return
-		}
-	*/
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Error().Msg("Error reading request body for Big5 input data")
+		http.Error(writer, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+
+	var inputData Big5Data
+	if err = json.Unmarshal(body, &inputData); err != nil {
+		logger.Error().Msg("Error unmarshalling request body for Big5 input data")
+		http.Error(writer, "Error unmarshalling request body", http.StatusBadRequest)
+		return
+	}
+
+	logger.Info().Msg(fmt.Sprintf("Received Big Five data: %+v", inputData))
 
 	writer.WriteHeader(http.StatusOK)
 	fmt.Fprintln(writer, "Received Big5 data")
 }
 
+// TODO: implement input data processing
 func InputDataTeamRoleHandler(writer http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		logger.Error().Msg(fmt.Sprintf("Incoming %s request, method not allowed", req.Method))
@@ -91,20 +100,27 @@ func InputDataTeamRoleHandler(writer http.ResponseWriter, req *http.Request) {
 
 	logger.Debug().Msg("Incoming request with Team Role data")
 
-	// TODO: Implement request body processing.
-	/*
-		body, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			logger.Error().Msg("Error reading request body for Team Role input data")
-			http.Error(writer, "Error reading request body", http.StatusInternalServerError)
-			return
-		}
-	*/
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Error().Msg("Error reading request body for Team Role input data")
+		http.Error(writer, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+
+	var inputData TeamRoleData
+	if err = json.Unmarshal(body, &inputData); err != nil {
+		logger.Error().Msg("Error unmarshalling request body for Team Role input data")
+		http.Error(writer, "Error unmarshalling request body", http.StatusBadRequest)
+		return
+	}
+
+	logger.Info().Msg(fmt.Sprintf("Received Team Role data: %+v", inputData))
 
 	writer.WriteHeader(http.StatusOK)
 	fmt.Fprintln(writer, "Received Team Role data")
 }
 
+// TODO: implement input data processing
 func InputDataExpertiseHandler(writer http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		logger.Error().Msg(fmt.Sprintf("Incoming %s request, method not allowed", req.Method))
@@ -114,20 +130,27 @@ func InputDataExpertiseHandler(writer http.ResponseWriter, req *http.Request) {
 
 	logger.Debug().Msg("Incoming request with Expertise data")
 
-	// TODO: Implement request body processing.
-	/*
-		body, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			logger.Error().Msg("Error reading request body for Expertise input data")
-			http.Error(writer, "Error reading request body", http.StatusInternalServerError)
-			return
-		}
-	*/
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Error().Msg("Error reading request body for Expertise input data")
+		http.Error(writer, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+
+	var inputData ExpertiseData
+	if err = json.Unmarshal(body, &inputData); err != nil {
+		logger.Error().Msg("Error unmarshalling request body for Expertise input data")
+		http.Error(writer, "Error unmarshalling request body", http.StatusBadRequest)
+		return
+	}
+
+	logger.Info().Msg(fmt.Sprintf("Received Expertise data: %+v", inputData))
 
 	writer.WriteHeader(http.StatusOK)
 	fmt.Fprintln(writer, "Received Expertise data")
 }
 
+// TODO: implement input data processing
 func InputDataManagerialHandler(writer http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		logger.Error().Msg(fmt.Sprintf("Incoming %s request, method not allowed", req.Method))
@@ -137,15 +160,21 @@ func InputDataManagerialHandler(writer http.ResponseWriter, req *http.Request) {
 
 	logger.Debug().Msg("Incoming request with Managerial data")
 
-	// TODO: Implement request body processing.
-	/*
-		body, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			logger.Error().Msg("Error reading request body for Managerial input data")
-			http.Error(writer, "Error reading request body", http.StatusInternalServerError)
-			return
-		}
-	*/
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Error().Msg("Error reading request body for Managerial input data")
+		http.Error(writer, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+
+	var inputData ManagerialData
+	if err = json.Unmarshal(body, &inputData); err != nil {
+		logger.Error().Msg("Error unmarshalling request body for Managerial input data")
+		http.Error(writer, "Error unmarshalling request body", http.StatusBadRequest)
+		return
+	}
+
+	logger.Info().Msg(fmt.Sprintf("Received Managerial data: %+v", inputData))
 
 	writer.WriteHeader(http.StatusOK)
 	fmt.Fprintln(writer, "Received Managerial data")
