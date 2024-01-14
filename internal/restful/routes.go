@@ -1,4 +1,4 @@
-package routes
+package restful
 
 import (
 	"encoding/json"
@@ -9,6 +9,9 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
+
+	"github.com/a8filich/graph-collab-api/internal/data"
+	"github.com/a8filich/graph-collab-api/internal/rpc_impl"
 )
 
 const apiPrefixV1 string = "/api/v1"
@@ -60,7 +63,6 @@ func HealthzHandler(writer http.ResponseWriter, req *http.Request) {
 	fmt.Fprintln(writer, "Healthy")
 }
 
-// TODO: implement input data processing
 func InputDataBig5Handler(writer http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		logger.Error().Msg(fmt.Sprintf("Incoming %s request, method not allowed", req.Method))
@@ -68,7 +70,7 @@ func InputDataBig5Handler(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	logger.Debug().Msg("Incoming request with Big Five data")
+	logger.Debug().Msg("Incoming request with Big5 data")
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
@@ -77,7 +79,7 @@ func InputDataBig5Handler(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var inputData Big5Data
+	var inputData data.Big5Data
 	if err = json.Unmarshal(body, &inputData); err != nil {
 		logger.Error().Msg("Error unmarshalling request body for Big5 input data")
 		http.Error(writer, "Error unmarshalling request body", http.StatusBadRequest)
@@ -86,11 +88,12 @@ func InputDataBig5Handler(writer http.ResponseWriter, req *http.Request) {
 
 	logger.Info().Msg(fmt.Sprintf("Received Big Five data: %+v", inputData))
 
+	rpc_impl.SendBig5DataPointToQuantifier(&inputData)
+
 	writer.WriteHeader(http.StatusOK)
 	fmt.Fprintln(writer, "Received Big5 data")
 }
 
-// TODO: implement input data processing
 func InputDataTeamRoleHandler(writer http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		logger.Error().Msg(fmt.Sprintf("Incoming %s request, method not allowed", req.Method))
@@ -107,7 +110,7 @@ func InputDataTeamRoleHandler(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var inputData TeamRoleData
+	var inputData data.TeamRoleData
 	if err = json.Unmarshal(body, &inputData); err != nil {
 		logger.Error().Msg("Error unmarshalling request body for Team Role input data")
 		http.Error(writer, "Error unmarshalling request body", http.StatusBadRequest)
@@ -116,11 +119,12 @@ func InputDataTeamRoleHandler(writer http.ResponseWriter, req *http.Request) {
 
 	logger.Info().Msg(fmt.Sprintf("Received Team Role data: %+v", inputData))
 
+	rpc_impl.SendTeamRoleDataPointToQuantifier(&inputData)
+
 	writer.WriteHeader(http.StatusOK)
 	fmt.Fprintln(writer, "Received Team Role data")
 }
 
-// TODO: implement input data processing
 func InputDataExpertiseHandler(writer http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		logger.Error().Msg(fmt.Sprintf("Incoming %s request, method not allowed", req.Method))
@@ -137,7 +141,7 @@ func InputDataExpertiseHandler(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var inputData ExpertiseData
+	var inputData data.ExpertiseData
 	if err = json.Unmarshal(body, &inputData); err != nil {
 		logger.Error().Msg("Error unmarshalling request body for Expertise input data")
 		http.Error(writer, "Error unmarshalling request body", http.StatusBadRequest)
@@ -146,11 +150,12 @@ func InputDataExpertiseHandler(writer http.ResponseWriter, req *http.Request) {
 
 	logger.Info().Msg(fmt.Sprintf("Received Expertise data: %+v", inputData))
 
+	rpc_impl.SendExpertiseDataPointToQuantifier(&inputData)
+
 	writer.WriteHeader(http.StatusOK)
 	fmt.Fprintln(writer, "Received Expertise data")
 }
 
-// TODO: implement input data processing
 func InputDataManagerialHandler(writer http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		logger.Error().Msg(fmt.Sprintf("Incoming %s request, method not allowed", req.Method))
@@ -167,7 +172,7 @@ func InputDataManagerialHandler(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var inputData ManagerialData
+	var inputData data.ManagerialData
 	if err = json.Unmarshal(body, &inputData); err != nil {
 		logger.Error().Msg("Error unmarshalling request body for Managerial input data")
 		http.Error(writer, "Error unmarshalling request body", http.StatusBadRequest)
@@ -175,6 +180,8 @@ func InputDataManagerialHandler(writer http.ResponseWriter, req *http.Request) {
 	}
 
 	logger.Info().Msg(fmt.Sprintf("Received Managerial data: %+v", inputData))
+
+	rpc_impl.SendManagerialDataPointToQuantifier(&inputData)
 
 	writer.WriteHeader(http.StatusOK)
 	fmt.Fprintln(writer, "Received Managerial data")

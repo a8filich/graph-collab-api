@@ -16,9 +16,11 @@ tidy:
 	@go mod tidy
 
 test:
+	#@go clean -cache
 	@go test -v ./...
 
 vet:
+	#@go clean -cache
 	@go vet ./...
 
 check: test vet

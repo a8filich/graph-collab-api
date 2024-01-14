@@ -1,4 +1,4 @@
-package routes
+package restful
 
 import (
 	"net/http"

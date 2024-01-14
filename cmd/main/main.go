@@ -8,7 +8,7 @@ import (
 
 	"github.com/rs/zerolog"
 
-	"github.com/a8filich/graph-collab-api/internal/routes"
+	"github.com/a8filich/graph-collab-api/internal/restful"
 )
 
 var (
@@ -25,7 +25,7 @@ var (
 )
 
 func main() {
-	router := routes.Router()
+	router := restful.Router()
 
 	addr := fmt.Sprintf("%s:%d", host, port)
 

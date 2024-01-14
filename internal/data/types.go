@@ -1,4 +1,4 @@
-package routes
+package data
 
 import (
 	"github.com/google/uuid"

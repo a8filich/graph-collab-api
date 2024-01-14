@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package rpc_impl;
+
+option go_package = "github.com/afilich/graph-collab-api/internal/rpc_impl";
+
+service QuantifierCommunication {
+  rpc SendBig5Msg(Big5Msg) returns (Empty) {}
+  rpc SendTeamRoleMsg(TeamRoleMsg) returns (Empty) {}
+  rpc SendExpertiseMsg(ExpertiseMsg) returns (Empty) {}
+  rpc SendManagerialMsg(ManagerialMsg) returns (Empty) {}
+}
+
+message PersonMsg {
+  string person_id = 1;
+  string name = 2;
+  uint32 age = 3;
+  string sex = 4;
+}
+
+message Big5Msg {
+  string id = 1;
+  PersonMsg person = 2;
+  float conscientiousness = 3;
+  float openness = 4;
+  float neuroticism = 5;
+  float extraversion = 6;
+  float agreeableness = 7;
+}
+
+message TeamRoleMsg {
+  string id = 1;
+  PersonMsg person = 2;
+  uint32 resourceInvestigator = 3;
+  uint32 teamworker = 4;
+  uint32 coordinator = 5;
+  uint32 plant = 6;
+  uint32 monitorEvaluator = 7;
+  uint32 specialist = 8;
+  uint32 shaper = 9;
+  uint32 implementer = 10;
+  uint32 completerFinisher = 11;
+}
+
+message ExpertiseMsg {
+  string id = 1;
+  PersonMsg person = 2;
+  repeated string currentExpertise = 3;
+  repeated string developmentGoals = 4;
+}
+
+message ManagerialMsg {
+  string id = 1;
+  PersonMsg person = 2;
+  uint32 communication = 3;
+  uint32 adaptability = 4;
+  uint32 conflictResolution = 5;
+  uint32 decisionMaking = 6;
+  uint32 leadership = 7;
+  uint32 experienceYears = 8;
+}
+
+message Empty {}
