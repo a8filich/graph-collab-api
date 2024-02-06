@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	QuantifierCommunication_SendBig5Msg_FullMethodName       = "/rpc_impl.QuantifierCommunication/SendBig5Msg"
-	QuantifierCommunication_SendTeamRoleMsg_FullMethodName   = "/rpc_impl.QuantifierCommunication/SendTeamRoleMsg"
-	QuantifierCommunication_SendExpertiseMsg_FullMethodName  = "/rpc_impl.QuantifierCommunication/SendExpertiseMsg"
-	QuantifierCommunication_SendManagerialMsg_FullMethodName = "/rpc_impl.QuantifierCommunication/SendManagerialMsg"
+	QuantifierCommunication_SendBig5Msg_FullMethodName            = "/rpc_impl.QuantifierCommunication/SendBig5Msg"
+	QuantifierCommunication_SendTeamRoleMsg_FullMethodName        = "/rpc_impl.QuantifierCommunication/SendTeamRoleMsg"
+	QuantifierCommunication_SendExpertiseMsg_FullMethodName       = "/rpc_impl.QuantifierCommunication/SendExpertiseMsg"
+	QuantifierCommunication_SendManagerialMsg_FullMethodName      = "/rpc_impl.QuantifierCommunication/SendManagerialMsg"
+	QuantifierCommunication_GetGraphComputationRes_FullMethodName = "/rpc_impl.QuantifierCommunication/GetGraphComputationRes"
 )
 
 // QuantifierCommunicationClient is the client API for QuantifierCommunication service.
@@ -33,6 +34,7 @@ type QuantifierCommunicationClient interface {
 	SendTeamRoleMsg(ctx context.Context, in *TeamRoleMsg, opts ...grpc.CallOption) (*Empty, error)
 	SendExpertiseMsg(ctx context.Context, in *ExpertiseMsg, opts ...grpc.CallOption) (*Empty, error)
 	SendManagerialMsg(ctx context.Context, in *ManagerialMsg, opts ...grpc.CallOption) (*Empty, error)
+	GetGraphComputationRes(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GraphComputationResMsg, error)
 }
 
 type quantifierCommunicationClient struct {
@@ -79,6 +81,15 @@ func (c *quantifierCommunicationClient) SendManagerialMsg(ctx context.Context, i
 	return out, nil
 }
 
+func (c *quantifierCommunicationClient) GetGraphComputationRes(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GraphComputationResMsg, error) {
+	out := new(GraphComputationResMsg)
+	err := c.cc.Invoke(ctx, QuantifierCommunication_GetGraphComputationRes_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QuantifierCommunicationServer is the server API for QuantifierCommunication service.
 // All implementations must embed UnimplementedQuantifierCommunicationServer
 // for forward compatibility
@@ -87,6 +98,7 @@ type QuantifierCommunicationServer interface {
 	SendTeamRoleMsg(context.Context, *TeamRoleMsg) (*Empty, error)
 	SendExpertiseMsg(context.Context, *ExpertiseMsg) (*Empty, error)
 	SendManagerialMsg(context.Context, *ManagerialMsg) (*Empty, error)
+	GetGraphComputationRes(context.Context, *Empty) (*GraphComputationResMsg, error)
 	mustEmbedUnimplementedQuantifierCommunicationServer()
 }
 
@@ -105,6 +117,9 @@ func (UnimplementedQuantifierCommunicationServer) SendExpertiseMsg(context.Conte
 }
 func (UnimplementedQuantifierCommunicationServer) SendManagerialMsg(context.Context, *ManagerialMsg) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendManagerialMsg not implemented")
+}
+func (UnimplementedQuantifierCommunicationServer) GetGraphComputationRes(context.Context, *Empty) (*GraphComputationResMsg, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGraphComputationRes not implemented")
 }
 func (UnimplementedQuantifierCommunicationServer) mustEmbedUnimplementedQuantifierCommunicationServer() {
 }
@@ -192,6 +207,24 @@ func _QuantifierCommunication_SendManagerialMsg_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QuantifierCommunication_GetGraphComputationRes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuantifierCommunicationServer).GetGraphComputationRes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: QuantifierCommunication_GetGraphComputationRes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuantifierCommunicationServer).GetGraphComputationRes(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // QuantifierCommunication_ServiceDesc is the grpc.ServiceDesc for QuantifierCommunication service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -214,6 +247,10 @@ var QuantifierCommunication_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendManagerialMsg",
 			Handler:    _QuantifierCommunication_SendManagerialMsg_Handler,
+		},
+		{
+			MethodName: "GetGraphComputationRes",
+			Handler:    _QuantifierCommunication_GetGraphComputationRes_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

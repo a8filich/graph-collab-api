@@ -9,6 +9,7 @@ service QuantifierCommunication {
   rpc SendTeamRoleMsg(TeamRoleMsg) returns (Empty) {}
   rpc SendExpertiseMsg(ExpertiseMsg) returns (Empty) {}
   rpc SendManagerialMsg(ManagerialMsg) returns (Empty) {}
+  rpc GetGraphComputationRes(Empty) returns (GraphComputationResMsg) {}
 }
 
 message PersonMsg {
@@ -58,6 +59,20 @@ message ManagerialMsg {
   uint32 decisionMaking = 6;
   uint32 leadership = 7;
   uint32 experienceYears = 8;
+}
+
+message GroupList {
+  repeated PersonMsg persons = 1;
+}
+
+message GraphComputationResMsg {
+  float compatibility_threshold = 1;
+  map<string, float> edge_distances = 2;
+  map<string, float> closeness_centralities = 3;
+  map<string, float> betweenness_centralities = 4;
+  map<string, float> silhouette_score = 5;
+  map<string, GroupList> groups = 6;
+  string graphPlotURL = 7;
 }
 
 message Empty {}
